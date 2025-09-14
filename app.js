@@ -1,103 +1,17 @@
 import express, { json } from "express";
-import movies from "./movies.json" with { type: "json" };
-import cors from "cors";
-import { validateMovie, validatePartialMovie } from "./schemas/movies.js";
-
+import moviesRouter from "./routes/movies.js";
+import { corsMiddleware } from "./middlewares/cors.js";
 const app = express();
-const ACCEPTED_ORIGINS = ["http://127.0.0.1:5500"];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (ACCEPTED_ORIGINS.includes(origin)) {
-      return callback(null, true);
-    }
-
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    return callback(new Error("Not allowed by CORS"));
-  },
-  optionsSuccessStatus: 200,
-};
 
 app.use(json());
-app.use(cors(corsOptions));
+app.use(corsMiddleware());
 app.disable("x-powered-by");
 
 app.get("/", (req, res) => {
   res.json({ message: "Hola mundo" });
 });
 
-app.get("/movies", (req, res) => {
-  const { genre } = req.query;
-  if (genre) {
-    const filteredMovies = movies.filter((movie) =>
-      movie.genre.some((g) => g.toLowerCase() === genre.toLowerCase())
-    );
-    return res.json(filteredMovies);
-  }
-  res.json(movies);
-});
-
-app.get("/movies/:id", (req, res) => {
-  const { id } = req.params;
-  const movie = movies.find((movie) => movie.id === id);
-  if (!movie) {
-    res.status(404).json({ message: "Movie not found" });
-    return;
-  }
-  res.json(movie);
-});
-
-app.post("/movies", (req, res) => {
-  const result = validateMovie(req.body);
-
-  if (result.error) {
-    return res.status(400).json({ error: JSON.parse(result.error.message) });
-  }
-
-  const newMovie = {
-    id: crypto.randomUUID(),
-    ...result.data,
-  };
-
-  movies.push(newMovie);
-  res.status(201).json(newMovie);
-});
-
-app.patch("/movies/:id", (req, res) => {
-  const result = validatePartialMovie(req.body);
-
-  if (result.error) {
-    return res.status(400).json({ error: JSON.parse(result.error.message) });
-  }
-
-  const { id } = req.params;
-  const movieIndex = movies.findIndex((movie) => movie.id === id);
-
-  if (movieIndex === -1) {
-    return res.status(404).json({ message: "Movie not found" });
-  }
-
-  const updatedMovie = { ...movies[movieIndex], ...result.data };
-  movies[movieIndex] = updatedMovie;
-
-  return res.json(updatedMovie);
-});
-
-app.delete("/movies/:id", (req, res) => {
-  const { id } = req.params;
-  const movieIndex = movies.findIndex((movie) => movie.id === id);
-
-  if (movieIndex === -1) {
-    return res.status(404).json({ message: "Movie not found" });
-  }
-
-  movies.splice(movieIndex, 1);
-
-  return res.status(204).json({ message: "Movie deleted" });
-});
+app.use("/movies", moviesRouter);
 
 const PORT = process.env.PORT ?? 1234;
 
