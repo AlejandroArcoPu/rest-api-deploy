@@ -1,7 +1,7 @@
-const express = require("express");
-const movies = require("./movies.json");
-const cors = require("cors");
-const { validateMovie, validatePartialMovie } = require("./schemas/movies");
+import express, { json } from "express";
+import movies from "./movies.json" with { type: "json" };
+import cors from "cors";
+import { validateMovie, validatePartialMovie } from "./schemas/movies.js";
 
 const app = express();
 const ACCEPTED_ORIGINS = ["http://127.0.0.1:5500"];
@@ -21,7 +21,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-app.use(express.json());
+app.use(json());
 app.use(cors(corsOptions));
 app.disable("x-powered-by");
 
