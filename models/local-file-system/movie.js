@@ -1,4 +1,4 @@
-import movies from "../movies.json" with { type: "json" };
+import movies from "../../movies.json" with { type: "json" };
 
 export class MovieModel {
   static async getAll({ genre }) {
