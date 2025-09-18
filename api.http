@@ -2,7 +2,7 @@
 GET http://localhost:1234/movies
 
 ### RECUPERAR UNA PELICULA POR ID
-GET http://localhost:1234/movies/9423c9a2-9315-11f0-83d5-6c02e07770b2
+GET http://localhost:1234/movies/94c04668-28c7-444e-a7ea-ed380594eab6
 
 ### RECUPERAR UNA PELICULA POR GENERO TERROR
 GET http://localhost:1234/movies?genre=Terror
@@ -26,13 +26,13 @@ Content-Type: application/json
 }
 
 ### ACTUALIZAR UNA PELICULA
-PATCH http://localhost:1234/movies/7f1acfa3-9326-11f0-83d5-6c02e07770b2
+PATCH http://localhost:1234/movies/047159ee-254e-4ddf-83f7-ccd793e3e316
 Content-Type: application/json
 
 {
-    "year": 2000,
-    "duration": 210
+    "year": 1995,
+    "duration": 190
 }
 
 ### ELIMINAR UNA PELICULA
-DELETE http://localhost:1234/movies/c5fbdbf3-9325-11f0-83d5-6c02e07770b2
+DELETE http://localhost:1234/movies/047159ee-254e-4ddf-83f7-ccd793e3e316

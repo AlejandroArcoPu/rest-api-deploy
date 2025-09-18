@@ -7,14 +7,19 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start:mysql": "node server-with-mysql.js",
+    "start:postgre": "node server-with-postgresql.js",
+    "start:local": "node server-local.js",
     "dev": "node --watch app.js",
+    "dev:postgre": "node --watch server-with-postgresql.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "cors": "2.8.5",
+    "dotenv": "^17.2.2",
     "express": "5.1.0",
     "mysql2": "3.14.5",
+    "postgres": "^3.4.7",
     "zod": "4.1.8"
   }
 }
